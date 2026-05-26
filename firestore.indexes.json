@@ -1,0 +1,22 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "feedings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "babyId", "order": "ASCENDING" },
+        { "fieldPath": "startTime", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "feedings",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "babyId", "order": "ASCENDING" },
+        { "fieldPath": "type", "order": "ASCENDING" },
+        { "fieldPath": "startTime", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
