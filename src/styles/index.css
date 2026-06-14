@@ -28,6 +28,10 @@
     @apply inline-flex items-center justify-center gap-2 px-5 py-3 bg-peach-500 text-white font-bold rounded-xl shadow-sm hover:bg-peach-600 active:scale-95 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-peach-400 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
   }
 
+  .btn-lavender {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-3 bg-lavender-400 text-white font-bold rounded-xl shadow-sm hover:bg-lavender-500 active:scale-95 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lavender-400 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+  }
+
   .btn-ghost {
     @apply inline-flex items-center justify-center gap-2 px-5 py-3 bg-transparent text-peach-600 font-bold rounded-xl border-2 border-peach-300 hover:bg-peach-50 active:scale-95 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-peach-400 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
   }
