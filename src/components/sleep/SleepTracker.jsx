@@ -12,7 +12,7 @@ import { formatTime } from '../../utils/formatters'
 import Spinner from '../ui/Spinner'
 
 export default function SleepTracker() {
-  const { activeSleep, lastSleep, loading } = useSleeps()
+  const { activeSleep, lastSleep, loading, error } = useSleeps()
   const { baby } = useBaby()
   const user = useAuth()
   const toast = useToast()
@@ -68,6 +68,10 @@ export default function SleepTracker() {
         <div className="flex justify-center py-4">
           <Spinner size="md" />
         </div>
+      ) : error ? (
+        <p className="text-xs text-blush-500 font-semibold text-center py-3">
+          Couldn't load sleep data — sleep rules may need to be deployed.
+        </p>
       ) : activeSleep ? (
         <div className="flex flex-col items-center gap-3 py-2">
           <p className="text-sm font-semibold text-lavender-500">😴 Sleeping</p>

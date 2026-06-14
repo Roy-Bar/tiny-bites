@@ -19,10 +19,19 @@ export function useFeedings() {
     }
 
     setLoading(true)
-    const unsub = subscribeToFeedings(user.uid, baby.id, (data) => {
-      setFeedings(data)
-      setLoading(false)
-    })
+    const unsub = subscribeToFeedings(
+      user.uid,
+      baby.id,
+      (data) => {
+        setFeedings(data)
+        setError(null)
+        setLoading(false)
+      },
+      (err) => {
+        setError(err)
+        setLoading(false)
+      }
+    )
 
     return unsub
   }, [user, baby?.id])

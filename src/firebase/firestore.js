@@ -74,17 +74,21 @@ export async function getFeeding(userId, feedingId) {
   return { id: snap.id, ...snap.data() }
 }
 
-export function subscribeToFeedings(userId, babyId, callback) {
+export function subscribeToFeedings(userId, babyId, callback, onError) {
   const q = query(
     collection(db, `users/${userId}/feedings`),
     where('babyId', '==', babyId),
     orderBy('startTime', 'desc'),
     limit(300)
   )
-  return onSnapshot(q, (snap) => {
-    const feedings = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
-    callback(feedings)
-  })
+  return onSnapshot(
+    q,
+    (snap) => {
+      const feedings = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+      callback(feedings)
+    },
+    onError
+  )
 }
 
 // ── Sleeps ───────────────────────────────────────────────────────────────────
@@ -115,15 +119,19 @@ export async function getSleep(userId, sleepId) {
   return { id: snap.id, ...snap.data() }
 }
 
-export function subscribeToSleeps(userId, babyId, callback) {
+export function subscribeToSleeps(userId, babyId, callback, onError) {
   const q = query(
     collection(db, `users/${userId}/sleeps`),
     where('babyId', '==', babyId),
     orderBy('startTime', 'desc'),
     limit(300)
   )
-  return onSnapshot(q, (snap) => {
-    const sleeps = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
-    callback(sleeps)
-  })
+  return onSnapshot(
+    q,
+    (snap) => {
+      const sleeps = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+      callback(sleeps)
+    },
+    onError
+  )
 }

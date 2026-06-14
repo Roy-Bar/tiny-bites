@@ -29,10 +29,19 @@ export function useSleeps() {
     }
 
     setLoading(true)
-    const unsub = subscribeToSleeps(user.uid, baby.id, (data) => {
-      setSleeps(data)
-      setLoading(false)
-    })
+    const unsub = subscribeToSleeps(
+      user.uid,
+      baby.id,
+      (data) => {
+        setSleeps(data)
+        setError(null)
+        setLoading(false)
+      },
+      (err) => {
+        setError(err)
+        setLoading(false)
+      }
+    )
 
     return unsub
   }, [user, baby?.id])

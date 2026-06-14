@@ -39,7 +39,7 @@ function StatCard({ emoji, label, value, sub }) {
 }
 
 export default function Sleep() {
-  const { sleeps, activeSleep, totalSleepToday, napsToday, loading } = useSleeps()
+  const { sleeps, activeSleep, totalSleepToday, napsToday, loading, error } = useSleeps()
   const elapsed = useElapsed(activeSleep?.startTime ?? null)
 
   const groups = useMemo(() => groupByDay(sleeps), [sleeps])
@@ -54,6 +54,13 @@ export default function Sleep() {
 
   return (
     <div className="space-y-5 animate-fade-in">
+      {error && (
+        <div className="card p-4 bg-blush-50 border-blush-200 text-sm text-blush-600 font-semibold">
+          Couldn't load sleep data. If this just started, the sleep database rules may
+          need to be deployed (<code>firebase deploy --only firestore:rules,firestore:indexes</code>).
+        </div>
+      )}
+
       <div className="grid grid-cols-3 gap-3">
         <StatCard
           emoji="🌙"
