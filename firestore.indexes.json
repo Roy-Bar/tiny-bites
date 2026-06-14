@@ -16,6 +16,14 @@
         { "fieldPath": "type", "order": "ASCENDING" },
         { "fieldPath": "startTime", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "sleeps",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "babyId", "order": "ASCENDING" },
+        { "fieldPath": "startTime", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

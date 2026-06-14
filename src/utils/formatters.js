@@ -14,6 +14,16 @@ export function formatDuration(seconds) {
   return `${m}m ${s}s`
 }
 
+export function formatDurationHM(seconds) {
+  if (!seconds || seconds <= 0) return '—'
+  const totalMinutes = Math.round(seconds / 60)
+  const h = Math.floor(totalMinutes / 60)
+  const m = totalMinutes % 60
+  if (h === 0) return `${m}m`
+  if (m === 0) return `${h}h`
+  return `${h}h ${m}m`
+}
+
 export function formatTime(timestamp) {
   if (!timestamp) return '—'
   const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp)

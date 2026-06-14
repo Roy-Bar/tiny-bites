@@ -8,6 +8,8 @@ import { formatBabyAge } from '../../utils/formatters'
 const PAGE_TITLES = {
   '/dashboard': 'Dashboard',
   '/log': 'Log Feeding',
+  '/sleep': 'Sleep',
+  '/sleep/log': 'Log Sleep',
   '/history': 'History',
   '/profile': 'Baby Profile',
   '/export': 'Export',

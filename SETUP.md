@@ -1,6 +1,6 @@
 # Tiny Bites — Baby Feeding Tracker
 
-A warm, friendly React app for tracking newborn feedings. Multiple users can log in, set up a baby profile, and track feedings in real time.
+A warm, friendly React app for tracking newborn feedings and sleep. Multiple users can log in, set up a baby profile, and track feedings and sleep in real time.
 
 ---
 
@@ -11,7 +11,7 @@ A warm, friendly React app for tracking newborn feedings. Multiple users can log
 - **Tailwind CSS** — warm peach/lavender/cream design system
 - **React Router v6** — client-side routing
 - **React Hook Form** — feeding log form
-- **Recharts** — 7-day feeding bar chart
+- **Recharts** — feeding & sleep bar charts
 - **date-fns** — date formatting and math
 
 ---
@@ -94,9 +94,12 @@ Rules are in `firestore.rules`. Each user can only read/write their own data und
 | Auth | Email/password sign up & sign in |
 | Baby Profile | Name, birth date, oz/ml preference |
 | Log Feeding | Type (breast L/R/both, formula, pumped bottle), amount, duration timer, time, notes |
-| Dashboard | Stats bar, today's timeline, 7-day chart, recent feedings |
+| Sleep Tracker | One-tap Start Sleep / Wake Up with a live timer; active session is stored in Firestore so it survives reloads and syncs across devices |
+| Log Sleep | Manually log or edit a past sleep (fell-asleep + woke-up times); leave wake time empty for an ongoing sleep |
+| Sleep page | Today's total sleep & nap count, live status, 7/30-day hours-slept chart, history grouped by day |
+| Dashboard | Stats bar, today's timeline, 7-day chart, recent feedings, sleep tracker widget |
 | History | All feedings, grouped by day, filter by type, search notes |
-| Edit / Delete | Tap pencil or trash on any feeding card |
+| Edit / Delete | Tap pencil or trash on any feeding or sleep card |
 | Export | Download CSV or copy JSON for a date range |
-| Live "last fed" counter | Updates every 30 seconds on dashboard |
-| Mobile-first | Bottom nav on mobile, sidebar on desktop |
+| Live counters | "Last fed" and "asleep for…" timers update on the dashboard |
+| Mobile-first | Bottom nav on mobile, sidebar (incl. Sleep) on desktop |

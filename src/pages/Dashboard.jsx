@@ -5,6 +5,7 @@ import StatsBar from '../components/dashboard/StatsBar'
 import DailyTimeline from '../components/dashboard/DailyTimeline'
 import FeedingChart from '../components/dashboard/FeedingChart'
 import FeedingCard from '../components/feeding/FeedingCard'
+import SleepTracker from '../components/sleep/SleepTracker'
 import EmptyState from '../components/ui/EmptyState'
 import Spinner from '../components/ui/Spinner'
 
@@ -78,6 +79,9 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+
+      {/* Sleep tracker */}
+      <SleepTracker />
     </div>
   )
 }

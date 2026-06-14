@@ -9,6 +9,8 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import LogFeeding from './pages/LogFeeding'
+import Sleep from './pages/Sleep'
+import LogSleep from './pages/LogSleep'
 import History from './pages/History'
 import BabyProfile from './pages/BabyProfile'
 import Export from './pages/Export'
@@ -32,6 +34,9 @@ export default function App() {
                   <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/log" element={<LogFeeding />} />
                   <Route path="/log/:feedingId" element={<LogFeeding />} />
+                  <Route path="/sleep" element={<Sleep />} />
+                  <Route path="/sleep/log" element={<LogSleep />} />
+                  <Route path="/sleep/log/:sleepId" element={<LogSleep />} />
                   <Route path="/history" element={<History />} />
                   <Route path="/profile" element={<BabyProfile />} />
                   <Route path="/export" element={<Export />} />

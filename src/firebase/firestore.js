@@ -86,3 +86,44 @@ export function subscribeToFeedings(userId, babyId, callback) {
     callback(feedings)
   })
 }
+
+// ── Sleeps ───────────────────────────────────────────────────────────────────
+
+export async function addSleep(userId, data) {
+  const ref = await addDoc(collection(db, `users/${userId}/sleeps`), {
+    ...data,
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+  })
+  return ref.id
+}
+
+export async function updateSleep(userId, sleepId, data) {
+  await updateDoc(doc(db, `users/${userId}/sleeps/${sleepId}`), {
+    ...data,
+    updatedAt: serverTimestamp(),
+  })
+}
+
+export async function deleteSleep(userId, sleepId) {
+  await deleteDoc(doc(db, `users/${userId}/sleeps/${sleepId}`))
+}
+
+export async function getSleep(userId, sleepId) {
+  const snap = await getDoc(doc(db, `users/${userId}/sleeps/${sleepId}`))
+  if (!snap.exists()) return null
+  return { id: snap.id, ...snap.data() }
+}
+
+export function subscribeToSleeps(userId, babyId, callback) {
+  const q = query(
+    collection(db, `users/${userId}/sleeps`),
+    where('babyId', '==', babyId),
+    orderBy('startTime', 'desc'),
+    limit(300)
+  )
+  return onSnapshot(q, (snap) => {
+    const sleeps = snap.docs.map((d) => ({ id: d.id, ...d.data() }))
+    callback(sleeps)
+  })
+}
