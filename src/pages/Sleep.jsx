@@ -56,8 +56,7 @@ export default function Sleep() {
     <div className="space-y-5 animate-fade-in">
       {error && (
         <div className="card p-4 bg-blush-50 border-blush-200 text-sm text-blush-600 font-semibold">
-          Couldn't load sleep data. If this just started, the sleep database rules may
-          need to be deployed (<code>firebase deploy --only firestore:rules,firestore:indexes</code>).
+          Couldn't load sleep data right now. Please check your connection and refresh.
         </div>
       )}
 

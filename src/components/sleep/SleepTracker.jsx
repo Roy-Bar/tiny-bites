@@ -70,7 +70,7 @@ export default function SleepTracker() {
         </div>
       ) : error ? (
         <p className="text-xs text-blush-500 font-semibold text-center py-3">
-          Couldn't load sleep data — sleep rules may need to be deployed.
+          Couldn't load sleep data — please check your connection and refresh.
         </p>
       ) : activeSleep ? (
         <div className="flex flex-col items-center gap-3 py-2">
