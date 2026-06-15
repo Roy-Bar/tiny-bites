@@ -37,8 +37,7 @@ export default function FeedingCard({ feeding, showDate = false }: FeedingCardPr
     <>
       <div className="card p-4 flex items-start gap-4 animate-fade-in">
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0"
-          style={{ backgroundColor: typeInfo.color + '33' }}
+          className="w-10 h-10 rounded-xl flex items-center justify-center text-xl shrink-0 bg-peach-100"
           aria-hidden="true"
         >
           {typeInfo.icon}

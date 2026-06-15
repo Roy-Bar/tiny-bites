@@ -1,12 +1,9 @@
-import { Link } from 'react-router-dom'
 import { useFeedings } from '../hooks/useFeedings'
 import { useBaby } from '../context/BabyContext'
-import StatsBar from '../components/dashboard/StatsBar'
+import TodayGlance from '../components/dashboard/TodayGlance'
 import DailyTimeline from '../components/dashboard/DailyTimeline'
 import FeedingChart from '../components/dashboard/FeedingChart'
-import FeedingCard from '../components/feeding/FeedingCard'
-import SleepTracker from '../components/sleep/SleepTracker'
-import EmptyState from '../components/ui/EmptyState'
+import SleepChart from '../components/sleep/SleepChart'
 import Spinner from '../components/ui/Spinner'
 
 export default function Dashboard() {
@@ -35,53 +32,13 @@ export default function Dashboard() {
         </p>
       </div>
 
-      <StatsBar />
+      <TodayGlance />
 
       <DailyTimeline />
 
       <FeedingChart />
 
-      {/* Recent Feedings */}
-      <div>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-extrabold text-gray-500 uppercase tracking-wide">
-            Today's Feedings
-          </h2>
-          <Link to="/history" className="text-xs font-bold text-peach-500 hover:underline">
-            See all →
-          </Link>
-        </div>
-
-        {todayFeedings.length === 0 ? (
-          <EmptyState
-            icon="🍼"
-            title="No feedings logged today"
-            message="Tap the + button to log your first feeding of the day."
-            action={
-              <Link to="/log" className="btn-primary text-sm px-5 py-2.5">
-                Log a Feeding
-              </Link>
-            }
-          />
-        ) : (
-          <div className="space-y-2">
-            {todayFeedings.slice(0, 5).map((f) => (
-              <FeedingCard key={f.id} feeding={f} />
-            ))}
-            {todayFeedings.length > 5 && (
-              <Link
-                to="/history"
-                className="block text-center text-sm font-bold text-peach-500 py-2 hover:underline"
-              >
-                +{todayFeedings.length - 5} more — view all
-              </Link>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* Sleep tracker */}
-      <SleepTracker />
+      <SleepChart />
     </div>
   )
 }

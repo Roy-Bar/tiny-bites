@@ -1,12 +1,20 @@
 import { Link, useLocation } from 'react-router-dom'
 import { type ReactNode } from 'react'
+import { MoonIcon } from '../sleep/icons'
 
 interface NavItem {
   to: string
   label: string
   icon: ReactNode
   primary?: boolean
+  accent?: 'peach' | 'lavender'
 }
+
+// Full class names per accent so Tailwind keeps them through purge.
+const ACCENT_STYLES = {
+  peach: { pill: 'bg-peach-500 shadow-peach-300/50', label: 'text-peach-500' },
+  lavender: { pill: 'bg-lavender-400 shadow-lavender-300/50', label: 'text-lavender-500' },
+} as const
 
 const NAV_ITEMS: NavItem[] = [
   {
@@ -20,7 +28,7 @@ const NAV_ITEMS: NavItem[] = [
   },
   {
     to: '/log',
-    label: 'Log',
+    label: 'Feed',
     icon: (
       <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <rect x="10.5" y="1.8" width="3" height="2.8" rx="1.2" />
@@ -30,6 +38,14 @@ const NAV_ITEMS: NavItem[] = [
       </svg>
     ),
     primary: true,
+    accent: 'peach',
+  },
+  {
+    to: '/sleep',
+    label: 'Sleep',
+    icon: <MoonIcon className="w-6 h-6" />,
+    primary: true,
+    accent: 'lavender',
   },
   {
     to: '/history',
@@ -62,6 +78,7 @@ export default function BottomNav() {
       {NAV_ITEMS.map((item) => {
         const active = pathname === item.to
         if (item.primary) {
+          const accent = ACCENT_STYLES[item.accent ?? 'peach']
           return (
             <Link
               key={item.to}
@@ -69,10 +86,10 @@ export default function BottomNav() {
               className="flex-1 flex flex-col items-center justify-center py-2 gap-0.5 relative"
               aria-label={item.label}
             >
-              <span className="flex items-center justify-center w-12 h-12 -mt-5 bg-peach-500 rounded-2xl shadow-lg shadow-peach-300/50 text-white">
+              <span className={`flex items-center justify-center w-12 h-12 -mt-5 rounded-2xl shadow-lg text-white ${accent.pill}`}>
                 {item.icon}
               </span>
-              <span className="text-[10px] font-bold text-peach-500 mt-0.5">{item.label}</span>
+              <span className={`text-[10px] font-bold mt-0.5 ${accent.label}`}>{item.label}</span>
             </Link>
           )
         }

@@ -47,7 +47,7 @@ export default function LogFeeding() {
     formState: { errors },
   } = useForm<LogFeedingFormValues>({
     defaultValues: {
-      items: [{ type: '', amount: '', unit: babyUnit }],
+      items: [{ type: 'formula', amount: '', unit: babyUnit }],
       startTime: toLocalDatetimeString(new Date()),
       durationSeconds: 0,
       notes: '',

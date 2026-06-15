@@ -17,11 +17,11 @@ export default function FeedingTypeSelector({ value, onChange }: FeedingTypeSele
             type="button"
             role="radio"
             aria-checked={selected}
-            onClick={() => onChange(type.id)}
+            onClick={() => onChange(selected ? ('' as FeedingTypeId) : type.id)}
             className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 font-bold text-sm transition-all duration-150 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lavender-400 focus-visible:ring-offset-2 ${
               selected
                 ? 'border-lavender-400 bg-lavender-100 text-lavender-700'
-                : 'border-cream-300 bg-cream-50 text-gray-500 hover:border-lavender-200 hover:bg-lavender-50'
+                : 'border-cream-300 bg-cream-50 text-gray-500'
             }`}
           >
             <span

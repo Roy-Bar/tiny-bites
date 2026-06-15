@@ -54,8 +54,10 @@ function StatCard({ icon, label, value, sub }: StatCardProps) {
 }
 
 export default function Sleep() {
-  const { sleeps, activeSleep, totalSleepToday, napsToday, loading, error } = useSleeps()
+  const { sleeps, activeSleep, lastSleep, totalSleepToday, napsToday, loading, error } = useSleeps()
   const elapsed = useElapsed(activeSleep?.startTime ?? null)
+  // When the baby isn't asleep, tick up from the last sleep's end time.
+  const awakeFor = useElapsed(!activeSleep ? (lastSleep?.endTime ?? null) : null)
 
   const groups = useMemo(() => groupByDay(sleeps), [sleeps])
 
@@ -92,8 +94,8 @@ export default function Sleep() {
         <StatCard
           icon={activeSleep ? <SleepingIcon size={22} /> : <SunIcon size={22} />}
           label="Status"
-          value={activeSleep ? (elapsed || '0:00') : 'Awake'}
-          sub={activeSleep ? 'asleep' : undefined}
+          value={activeSleep ? (elapsed || '0:00') : (awakeFor || 'Awake')}
+          sub={activeSleep ? 'asleep' : (awakeFor ? 'awake' : undefined)}
         />
       </div>
 
