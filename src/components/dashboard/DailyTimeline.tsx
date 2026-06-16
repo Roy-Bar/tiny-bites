@@ -9,6 +9,25 @@ import type { Feeding, FeedingTypeDef, Sleep, TimestampLike } from '../../types'
 
 const DAY_MINUTES = 1440
 
+// Feeding dots scale with how much the baby ate. Amounts typically range
+// 20–180 (ml/oz·equivalent); we map that to a 14–30px diameter and fall back
+// to the middle size when no amount is logged (e.g. breastfeeding by duration).
+const MIN_AMOUNT = 0
+const MAX_AMOUNT = 200
+const MIN_DOT = 14
+const MAX_DOT = 30
+const DEFAULT_DOT = 20
+
+function feedingDotSize(f: Feeding): number {
+  const total = f.items?.some((i) => i.amount)
+    ? f.items.reduce((sum, i) => sum + (i.amount ?? 0), 0)
+    : f.amount ?? 0
+  if (!total) return DEFAULT_DOT
+  const clamped = Math.max(MIN_AMOUNT, Math.min(MAX_AMOUNT, total))
+  const t = (clamped - MIN_AMOUNT) / (MAX_AMOUNT - MIN_AMOUNT)
+  return Math.round(MIN_DOT + t * (MAX_DOT - MIN_DOT))
+}
+
 function minutesFromMidnight(timestamp: TimestampLike | null | undefined): number {
   if (!timestamp) return 0
   const d = toJsDate(timestamp)
@@ -112,14 +131,15 @@ export default function DailyTimeline() {
             const pct = (minutesFromMidnight(f.startTime) / DAY_MINUTES) * 100
             const items = f.items?.filter((i) => i.type) ?? [{ type: f.type }]
             const isMixed = items.length > 1
+            const size = feedingDotSize(f)
             const label = isMixed
               ? `Mixed feeding at ${formatTime(f.startTime)}`
               : `${(FEEDING_TYPE_MAP[f.type] ?? {} as Partial<FeedingTypeDef>).label} at ${formatTime(f.startTime)}`
             return (
               <button
                 key={f.id}
-                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-5 h-5 rounded-full border-2 border-white shadow-sm hover:scale-125 transition-transform duration-150 z-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lavender-400"
-                style={{ left: `${pct}%`, backgroundColor: '#ffb093' }}
+                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 rounded-full border-2 border-white shadow-sm hover:scale-125 transition-transform duration-150 z-20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-lavender-400"
+                style={{ left: `${pct}%`, width: `${size}px`, height: `${size}px`, backgroundColor: '#ffb093' }}
                 aria-label={label}
                 onMouseEnter={() => setTooltip(f)}
                 onFocus={() => setTooltip(f)}
@@ -205,9 +225,6 @@ export default function DailyTimeline() {
         </span>
         <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-gray-400">
           <span className="w-4 h-3 rounded bg-lavender-200" /> Sleep
-        </span>
-        <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-gray-400">
-          <span aria-hidden="true">💩</span> Poop
         </span>
       </div>
     </div>
