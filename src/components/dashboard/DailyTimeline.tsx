@@ -53,7 +53,7 @@ function todaySleepBands(sleeps: Sleep[]): SleepBand[] {
 }
 
 export default function DailyTimeline() {
-  const { todayFeedings } = useFeedings()
+  const { todayFeedings, todayPoops } = useFeedings()
   const { sleeps } = useSleeps()
   const [tooltip, setTooltip] = useState<Feeding | null>(null)
   const [sleepTip, setSleepTip] = useState<SleepBand | null>(null)
@@ -61,7 +61,7 @@ export default function DailyTimeline() {
 
   const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes()
   const bands = todaySleepBands(sleeps)
-  const isEmpty = todayFeedings.length === 0 && bands.length === 0
+  const isEmpty = todayFeedings.length === 0 && bands.length === 0 && todayPoops.length === 0
 
   return (
     <div className="card p-4">
@@ -81,7 +81,7 @@ export default function DailyTimeline() {
           ref={barRef}
           className="relative h-10 bg-cream-100 rounded-full cursor-pointer overflow-visible"
           role="img"
-          aria-label="Timeline of today's feedings and sleeps"
+          aria-label="Timeline of today's feedings, sleeps, and diaper changes"
         >
           {/* Sleep bands (behind dots and the time marker) */}
           {bands.map((b) => (
@@ -126,6 +126,21 @@ export default function DailyTimeline() {
                 onMouseLeave={() => setTooltip(null)}
                 onBlur={() => setTooltip(null)}
               />
+            )
+          })}
+
+          {todayPoops.map((p) => {
+            const pct = (minutesFromMidnight(p.startTime) / DAY_MINUTES) * 100
+            return (
+              <span
+                key={`poop-${p.id}`}
+                className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 text-sm z-20 select-none"
+                style={{ left: `${pct}%` }}
+                role="img"
+                aria-label={`Poopy time at ${formatTime(p.startTime)}`}
+              >
+                💩
+              </span>
             )
           })}
 
@@ -190,6 +205,9 @@ export default function DailyTimeline() {
         </span>
         <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-gray-400">
           <span className="w-4 h-3 rounded bg-lavender-200" /> Sleep
+        </span>
+        <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-gray-400">
+          <span aria-hidden="true">💩</span> Poop
         </span>
       </div>
     </div>

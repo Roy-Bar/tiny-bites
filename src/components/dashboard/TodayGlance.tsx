@@ -8,10 +8,12 @@ import { useTimeSince } from '../../hooks/useTimeSince'
 import { useAuth } from '../../context/AuthContext'
 import { useBaby } from '../../context/BabyContext'
 import { useToast } from '../ui/Toast'
-import { addSleep, updateSleep } from '../../firebase/firestore'
+import { addSleep, updateSleep, addFeeding } from '../../firebase/firestore'
 import { formatAmount, formatDurationHM, formatBabyAge, toJsDate } from '../../utils/formatters'
+import { POOP_TYPE, POOP_NOTE } from '../../utils/constants'
 import Spinner from '../ui/Spinner'
 import { MoonIcon, SleepingIcon, SunIcon } from '../sleep/icons'
+import { FeedingIcon } from '../feeding/icons'
 
 // A warm, at-a-glance summary of the day across feeding + sleep. Detail lives on
 // the Feeding (History) and Sleep pages, linked from each panel.
@@ -63,6 +65,24 @@ export default function TodayGlance() {
         endTime: Timestamp.fromDate(new Date()),
       })
       toast?.('Good morning! ☀️')
+    } catch {
+      toast?.('Could not save — please try again', 'error')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function logPoop() {
+    if (!baby?.id || !user || busy) return
+    setBusy(true)
+    try {
+      await addFeeding(user.uid, {
+        babyId: baby.id,
+        type: POOP_TYPE,
+        startTime: Timestamp.fromDate(new Date()),
+        notes: POOP_NOTE,
+      })
+      toast?.('Logged 💩')
     } catch {
       toast?.('Could not save — please try again', 'error')
     } finally {
@@ -125,6 +145,24 @@ export default function TodayGlance() {
           <p className="text-xs text-gray-400 mt-0.5">
             {lastFeeding ? `Last fed ${lastFedAgo}` : 'Not fed yet'}
           </p>
+          <div className="flex gap-2 mt-3">
+            <Link
+              to="/log"
+              aria-label="Log a feeding"
+              className="btn-primary text-sm !py-2 flex-1 !bg-peach-400 hover:!bg-peach-500"
+            >
+              <FeedingIcon size={18} />
+              <span className="hidden md:inline">Log Feed</span>
+            </Link>
+            <button
+              onClick={logPoop}
+              disabled={busy}
+              aria-label="Log poopy time"
+              className="text-sm py-2 px-3 rounded-xl bg-peach-100 text-peach-600 font-bold hover:bg-peach-200 transition-colors disabled:opacity-50 flex-1 md:flex-none"
+            >
+              💩
+            </button>
+          </div>
           <Link to="/history" className="text-xs font-bold text-peach-500 hover:underline mt-auto pt-3">
             View feeding →
           </Link>

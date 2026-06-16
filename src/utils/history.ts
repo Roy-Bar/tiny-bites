@@ -7,6 +7,7 @@ export type EventToggle = 'both' | 'feedings' | 'sleeps'
 export type HistoryEvent =
   | { kind: 'feeding'; time: Date; feeding: Feeding }
   | { kind: 'sleep'; time: Date; sleep: Sleep }
+  | { kind: 'poop'; time: Date; poop: Feeding }
 
 export interface HistoryDay {
   date: Date
@@ -51,6 +52,7 @@ function matchesSearch(notes: string | null | undefined, q: string): boolean {
 export function buildHistoryDays(
   feedings: Feeding[],
   sleeps: Sleep[],
+  poops: Feeding[],
   filters: HistoryFilters,
 ): HistoryDay[] {
   const events: HistoryEvent[] = []
@@ -69,6 +71,13 @@ export function buildHistoryDays(
       if (!s.startTime) continue
       if (!matchesSearch(s.notes, q)) continue
       events.push({ kind: 'sleep', time: toJsDate(s.startTime), sleep: s })
+    }
+  }
+  if (filters.toggle !== 'sleeps') {
+    for (const p of poops) {
+      if (!p.startTime) continue
+      if (!matchesSearch(p.notes, q)) continue
+      events.push({ kind: 'poop', time: toJsDate(p.startTime), poop: p })
     }
   }
 
@@ -90,7 +99,7 @@ export function buildHistoryDays(
     if (ev.kind === 'feeding') {
       day.feedingCount += 1
       day.totalAmount += feedingAmount(ev.feeding)
-    } else {
+    } else if (ev.kind === 'sleep') {
       day.napCount += 1
       day.sleepSeconds += sleepSeconds(ev.sleep)
     }

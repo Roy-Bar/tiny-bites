@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { useFeedings } from '../hooks/useFeedings'
 import { useSleeps } from '../hooks/useSleeps'
 import FeedingCard from '../components/feeding/FeedingCard'
+import PoopRow from '../components/feeding/PoopRow'
 import SleepCard from '../components/sleep/SleepCard'
 import EmptyState from '../components/ui/EmptyState'
 import Spinner from '../components/ui/Spinner'
@@ -25,7 +26,7 @@ const TOGGLES: { id: EventToggle; label: string }[] = [
 ]
 
 export default function History() {
-  const { feedings, loading: feedingsLoading } = useFeedings()
+  const { feedings, poops, loading: feedingsLoading } = useFeedings()
   const { sleeps, loading: sleepsLoading } = useSleeps()
   const { baby } = useBaby()
   const unit = baby?.unitPreference ?? 'oz'
@@ -34,11 +35,11 @@ export default function History() {
   const [search, setSearch] = useState('')
 
   const loading = feedingsLoading || sleepsLoading
-  const hasAnyData = feedings.length > 0 || sleeps.length > 0
+  const hasAnyData = feedings.length > 0 || sleeps.length > 0 || poops.length > 0
 
   const days = useMemo(
-    () => buildHistoryDays(feedings, sleeps, { toggle, typeFilter, search }),
-    [feedings, sleeps, toggle, typeFilter, search]
+    () => buildHistoryDays(feedings, sleeps, poops, { toggle, typeFilter, search }),
+    [feedings, sleeps, poops, toggle, typeFilter, search]
   )
 
   function toggleType(id: string) {
@@ -161,8 +162,10 @@ export default function History() {
                 {day.events.map((ev) =>
                   ev.kind === 'feeding' ? (
                     <FeedingCard key={`f-${ev.feeding.id}`} feeding={ev.feeding} />
-                  ) : (
+                  ) : ev.kind === 'sleep' ? (
                     <SleepCard key={`s-${ev.sleep.id}`} sleep={ev.sleep} />
+                  ) : (
+                    <PoopRow key={`p-${ev.poop.id}`} poop={ev.poop} />
                   )
                 )}
               </div>

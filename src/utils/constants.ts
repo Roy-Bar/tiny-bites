@@ -57,3 +57,13 @@ export const CHART_COLORS: Record<FeedingTypeId, string> = {
   formula: '#a78bfa',
   pumped_bottle: '#72a376',
 }
+
+// Poops reuse the feedings collection, marked by this sentinel type. They are
+// intentionally NOT part of FEEDING_TYPES, so they never appear in feeding-type
+// filters, charts, or stats.
+export const POOP_TYPE = 'poop'
+export const POOP_NOTE = 'Poopy time 💩'
+
+export function isPoop(f: { type?: string | null }): boolean {
+  return f.type === POOP_TYPE
+}

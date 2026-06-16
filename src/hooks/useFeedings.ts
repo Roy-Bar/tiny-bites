@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { subscribeToFeedings } from '../firebase/firestore'
+import { isPoop } from '../utils/constants'
 import { useAuth } from '../context/AuthContext'
 import { useBaby } from '../context/BabyContext'
 import { startOfDay, isToday, subDays, format, startOfMonth, endOfMonth } from 'date-fns'
@@ -36,12 +37,14 @@ export function useFeedings() {
   const user = useAuth()
   const { baby } = useBaby()
   const [feedings, setFeedings] = useState<Feeding[]>([])
+  const [poops, setPoops] = useState<Feeding[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<FirestoreError | null>(null)
 
   useEffect(() => {
     if (!user || !baby?.id) {
       setFeedings([])
+      setPoops([])
       setLoading(false)
       return
     }
@@ -51,7 +54,8 @@ export function useFeedings() {
       user.uid,
       baby.id,
       (data) => {
-        setFeedings(data)
+        setFeedings(data.filter((f) => !isPoop(f)))
+        setPoops(data.filter((f) => isPoop(f)))
         setError(null)
         setLoading(false)
       },
@@ -67,6 +71,11 @@ export function useFeedings() {
   const todayFeedings = useMemo(
     () => feedings.filter((f) => f.startTime && isToday(f.startTime.toDate())),
     [feedings]
+  )
+
+  const todayPoops = useMemo(
+    () => poops.filter((p) => p.startTime && isToday(p.startTime.toDate())),
+    [poops]
   )
 
   const lastFeeding = feedings[0] ?? null
@@ -165,7 +174,9 @@ export function useFeedings() {
 
   return {
     feedings,
+    poops,
     todayFeedings,
+    todayPoops,
     lastFeeding,
     avgAmountToday,
     totalAmountToday,

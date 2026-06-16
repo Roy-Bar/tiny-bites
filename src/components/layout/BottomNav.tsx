@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
 import { type ReactNode } from 'react'
 import { MoonIcon } from '../sleep/icons'
+import { FeedingIcon } from '../feeding/icons'
 
 interface NavItem {
   to: string
@@ -30,12 +31,7 @@ const NAV_ITEMS: NavItem[] = [
     to: '/log',
     label: 'Feed',
     icon: (
-      <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <rect x="10.5" y="1.8" width="3" height="2.8" rx="1.2" />
-        <rect x="8.5" y="4" width="7" height="2.8" rx="1" />
-        <path d="M9 6.8H15V8c1.7 0 2.5 1 2.5 3v7c0 2-1 3.5-3 3.5h-5c-2 0-3-1.5-3-3.5v-7c0-2 .8-3 2.5-3z" />
-        <path d="M9 12h2.5M9 15h2.5" />
-      </svg>
+      <FeedingIcon className="w-6 h-6" />
     ),
     primary: true,
     accent: 'peach',
