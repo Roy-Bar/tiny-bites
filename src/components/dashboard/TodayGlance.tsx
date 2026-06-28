@@ -10,10 +10,11 @@ import { useBaby } from '../../context/BabyContext'
 import { useToast } from '../ui/Toast'
 import { addSleep, updateSleep, addFeeding } from '../../firebase/firestore'
 import { formatAmount, formatDurationHM, formatBabyAge, toJsDate } from '../../utils/formatters'
-import { POOP_TYPE, POOP_NOTE } from '../../utils/constants'
+import { POOP_TYPE } from '../../utils/constants'
 import Spinner from '../ui/Spinner'
 import { MoonIcon, SleepingIcon, SunIcon } from '../sleep/icons'
 import { FeedingIcon } from '../feeding/icons'
+import PoopTimeModal from '../feeding/PoopTimeModal'
 
 // A warm, at-a-glance summary of the day across feeding + sleep. Detail lives on
 // the Feeding (History) and Sleep pages, linked from each panel.
@@ -24,6 +25,7 @@ export default function TodayGlance() {
   const user = useAuth()
   const toast = useToast()
   const [busy, setBusy] = useState(false)
+  const [poopOpen, setPoopOpen] = useState(false)
 
   const unit = baby?.unitPreference ?? 'oz'
   const lastFedAgo = useTimeSince(lastFeeding?.startTime ?? null)
@@ -72,17 +74,17 @@ export default function TodayGlance() {
     }
   }
 
-  async function logPoop() {
+  async function savePoop(time: Date) {
     if (!baby?.id || !user || busy) return
     setBusy(true)
     try {
       await addFeeding(user.uid, {
         babyId: baby.id,
         type: POOP_TYPE,
-        startTime: Timestamp.fromDate(new Date()),
-        notes: POOP_NOTE,
+        startTime: Timestamp.fromDate(time),
       })
       toast?.('Logged 💩')
+      setPoopOpen(false)
     } catch {
       toast?.('Could not save — please try again', 'error')
     } finally {
@@ -155,7 +157,7 @@ export default function TodayGlance() {
               <span className="hidden md:inline">Log Feed</span>
             </Link>
             <button
-              onClick={logPoop}
+              onClick={() => setPoopOpen(true)}
               disabled={busy}
               aria-label="Log poopy time"
               className="text-sm py-2 px-3 rounded-xl bg-peach-100 text-peach-600 font-bold hover:bg-peach-200 transition-colors disabled:opacity-50 flex-1 md:flex-none"
@@ -201,6 +203,15 @@ export default function TodayGlance() {
           </Link>
         </div>
       </div>
+
+      <PoopTimeModal
+        isOpen={poopOpen}
+        title="Log poopy time 💩"
+        initialTime={new Date()}
+        saving={busy}
+        onClose={() => setPoopOpen(false)}
+        onSave={savePoop}
+      />
     </div>
   )
 }

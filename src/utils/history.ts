@@ -2,7 +2,7 @@ import { format, startOfDay } from 'date-fns'
 import { toJsDate } from './formatters'
 import type { Feeding, Sleep } from '../types'
 
-export type EventToggle = 'both' | 'feedings' | 'sleeps'
+export type EventToggle = 'both' | 'feedings' | 'sleeps' | 'poops'
 
 export type HistoryEvent =
   | { kind: 'feeding'; time: Date; feeding: Feeding }
@@ -58,7 +58,7 @@ export function buildHistoryDays(
   const events: HistoryEvent[] = []
   const q = filters.search.trim().toLowerCase()
 
-  if (filters.toggle !== 'sleeps') {
+  if (filters.toggle === 'both' || filters.toggle === 'feedings') {
     for (const f of feedings) {
       if (!f.startTime) continue
       if (!feedingMatchesType(f, filters.typeFilter)) continue
@@ -66,14 +66,14 @@ export function buildHistoryDays(
       events.push({ kind: 'feeding', time: toJsDate(f.startTime), feeding: f })
     }
   }
-  if (filters.toggle !== 'feedings') {
+  if (filters.toggle === 'both' || filters.toggle === 'sleeps') {
     for (const s of sleeps) {
       if (!s.startTime) continue
       if (!matchesSearch(s.notes, q)) continue
       events.push({ kind: 'sleep', time: toJsDate(s.startTime), sleep: s })
     }
   }
-  if (filters.toggle !== 'sleeps') {
+  if (filters.toggle === 'both' || filters.toggle === 'poops') {
     for (const p of poops) {
       if (!p.startTime) continue
       if (!matchesSearch(p.notes, q)) continue

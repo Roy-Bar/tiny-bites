@@ -22,6 +22,7 @@ function dayLabel(date: Date): string {
 const TOGGLES: { id: EventToggle; label: string }[] = [
   { id: 'both', label: 'All' },
   { id: 'feedings', label: 'Feedings' },
+  { id: 'poops', label: 'Poops' },
   { id: 'sleeps', label: 'Sleeps' },
 ]
 
@@ -91,7 +92,7 @@ export default function History() {
             })}
           </div>
         </div>
-        {toggle !== 'sleeps' && (
+        {(toggle === 'both' || toggle === 'feedings') && (
           <div>
             <p className="label mb-2">Filter by type</p>
             <div className="flex flex-wrap gap-2">

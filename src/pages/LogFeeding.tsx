@@ -241,22 +241,7 @@ export default function LogFeeding() {
       )}
 
       <div>
-        <div className="flex items-center justify-between mb-1">
-          <label htmlFor="notes" className="label mb-0">Notes (optional)</label>
-          <Controller
-            name="notes"
-            control={control}
-            render={({ field }) => (
-              <button
-                type="button"
-                onClick={() => field.onChange((field.value ? field.value + '\n' : '') + 'Poopy time 💩')}
-                className="text-xs font-bold text-peach-500 hover:text-peach-600 transition-colors"
-              >
-                + Poopy time 💩
-              </button>
-            )}
-          />
-        </div>
+        <label htmlFor="notes" className="label">Notes (optional)</label>
         <Controller
           name="notes"
           control={control}

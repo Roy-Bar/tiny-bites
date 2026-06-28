@@ -62,7 +62,6 @@ export const CHART_COLORS: Record<FeedingTypeId, string> = {
 // intentionally NOT part of FEEDING_TYPES, so they never appear in feeding-type
 // filters, charts, or stats.
 export const POOP_TYPE = 'poop'
-export const POOP_NOTE = 'Poopy time 💩'
 
 export function isPoop(f: { type?: string | null }): boolean {
   return f.type === POOP_TYPE
